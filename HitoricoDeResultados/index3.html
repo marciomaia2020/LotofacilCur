@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Combinações Lotofácil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            width: 100%;
+        }
+        main {
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+        label, select, button {
+            display: block;
+            margin: 10px 0;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        pre {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Gerador de Combinações para Lotofácil</h1>
+    </header>
+    <main>
+        <label for="dezenas">Escolha a quantidade de dezenas (15 a 20):</label>
+        <select id="dezenas">
+            <script>
+                for (let i = 15; i <= 20; i++) {
+                    document.write(`<option value="${i}">${i} dezenas</option>`);
+                }
+            </script>
+        </select>
+        <button id="gerar">Gerar Combinações</button>
+        <div class="result" id="result"></div>
+    </main>
+    <script>
+        const tabelaPrecos = {
+            15: 3.00,
+            16: 48.00,
+            17: 408.00,
+            18: 2448.00,
+            19: 11628.00,
+            20: 46512.00
+        };
+
+        const tabelaProbabilidades = {
+            15: { sena: 3268760, quina: 21792, quadra: 692 },
+            16: { sena: 204298, quina: 3027, quadra: 162 },
+            17: { sena: 24035, quina: 601, quadra: 49 },
+            18: { sena: 4006, quina: 153, quadra: 18 },
+            19: { sena: 843, quina: 47, quadra: 8 },
+            20: { sena: 211, quina: 17, quadra: 4 }
+        };
+
+        document.getElementById('gerar').addEventListener('click', () => {
+            const qtdDezenas = parseInt(document.getElementById('dezenas').value, 10);
+            const custo = tabelaPrecos[qtdDezenas];
+            const prob = tabelaProbabilidades[qtdDezenas];
+            const resultDiv = document.getElementById('result');
+
+            const combinacoesGeradas = Math.min(1000, Math.ceil(prob.sena * 0.01)); // Limita a 100 jogos
+            const valorTotalAposta = custo * combinacoesGeradas;
+
+            let mensagem = `
+                <p><strong>Quantidade de dezenas escolhidas:</strong> ${qtdDezenas}</p>
+                <p><strong>Custo por combinação:</strong> R$ ${custo.toFixed(2)}</p>
+                <p><strong>Probabilidade de acerto:</strong></p>
+                <ul>
+                    <li><strong>Sena:</strong> 1 em ${prob.sena}</li>
+                    <li><strong>Quina:</strong> 1 em ${prob.quina}</li>
+                    <li><strong>Quadra:</strong> 1 em ${prob.quadra}</li>
+                </ul>
+                <p><strong>Quantidade de combinações geradas (1% das combinações possíveis):</strong> ${combinacoesGeradas}</p>
+                <p><strong>Valor total da aposta:</strong> R$ ${valorTotalAposta.toFixed(2)}</p>
+                <button onclick="salvarCombinacoes(${qtdDezenas}, ${combinacoesGeradas})">Salvar combinações</button>
+            `;
+
+            resultDiv.innerHTML = mensagem;
+        });
+
+        function gerarCombinacoes(dezenas, quantidade) {
+            const numeros = Array.from({ length: 25 }, (_, i) => i + 1);
+            const combinacoes = [];
+            while (combinacoes.length < quantidade) {
+                const combinacao = [];
+                while (combinacao.length < dezenas) {
+                    const numero = numeros[Math.floor(Math.random() * numeros.length)];
+                    if (!combinacao.includes(numero)) {
+                        combinacao.push(numero);
+                    }
+                }
+                combinacoes.push(combinacao.sort((a, b) => a - b).join(','));
+            }
+            return combinacoes;
+        }
+
+        function salvarCombinacoes(dezenas, quantidade) {
+            const combinacoes = gerarCombinacoes(dezenas, quantidade);
+            const blob = new Blob([combinacoes.join('\n')], { type: "text/plain;charset=utf-8" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "combinacoes_lotofacil.txt";
+            link.click();
+        }
+    </script>
+</body>
+</html>

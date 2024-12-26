@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados da Lotofácil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #FFFFFF; /* Branco de fundo */
+            color: #2E8B57; /* Verde escuro para o texto */
+        }
+        h1 {
+            text-align: center;
+            color: #006400; /* Verde da Lotofácil */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #F0F8FF; /* Azul claro de fundo da tabela */
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #4CAF50; /* Verde da Lotofácil para bordas */
+        }
+        th {
+            background-color: #4CAF50; /* Verde da Lotofácil para cabeçalhos */
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #F9F9F9; /* Cor clara para linhas pares */
+        }
+        tr:nth-child(odd) {
+            background-color: #FFFFFF; /* Branco para linhas ímpares */
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .lotofacil-button {
+            background-color: #FFD700; /* Amarelo para o botão */
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .lotofacil-button:hover {
+            background-color: #DAA520; /* Tom de amarelo mais escuro ao passar o mouse */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Resultados da Lotofácil</h1>
+    <button class="lotofacil-button" onclick="fetchLotofacilResults()">Carregar Resultados</button>
+    
+    <table id="lotofacilResults">
+        <thead>
+            <tr>
+                <th># Concurso</th>
+                <th>Data Sorteio</th>
+                <th>Dezenas Sorteadas</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Resultados da Lotofácil serão inseridos aqui -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // Função para buscar os resultados da Lotofácil
+    async function fetchLotofacilResults() {
+        const url = 'https://loteriascaixa-api.herokuapp.com/api/lotofacil';
+        let page = 1;
+        let allResults = [];
+        
+        while (true) {
+            const response = await fetch(`${url}?page=${page}`);
+            const data = await response.json();
+            
+            if (data.length === 0) break; // Se não houver mais dados, sair do loop
+            
+            allResults = [...allResults, ...data];
+            page++;
+        }
+
+        allResults = allResults.sort((a, b) => a.concurso - b.concurso); // Ordena pelos concursos
+        displayResults(allResults);
+    }
+
+    // Função para exibir os resultados na tabela
+    function displayResults(results) {
+        const tableBody = document.getElementById('lotofacilResults').getElementsByTagName('tbody')[0];
+        tableBody.innerHTML = ''; // Limpa a tabela antes de adicionar os novos dados
+        results.forEach(result => {
+            const row = tableBody.insertRow();
+            row.innerHTML = `
+                <td>${result.concurso}</td>
+                <td>${result.data}</td>
+                <td>${result.dezenas.join(' - ')}</td>
+            `;
+        });
+    }
+</script>
+
+</body>
+</html>
