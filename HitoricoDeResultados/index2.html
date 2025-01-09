@@ -4,235 +4,426 @@
     <meta charset="UTF-8">
     <title>Histórico de Resultados Lotofácil</title>
     <style>
- body {
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    .container {
-        background-color: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        max-width: 1200px; /* Aumenta a largura máxima */
-        width: 100%;
-    }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            width: 100%;
+        }
 
-    .result {
-        margin-bottom: 20px;
-        display: inline-block; /* Permite que os resultados fiquem lado a lado */
-        width: 30%; /* Reduz a largura para caber três em uma linha */
-        vertical-align: top;
-    }
+        .result {
+            margin-bottom: 20px;
+            display: inline-block;
+            width: 30%;
+            vertical-align: top;
+        }
 
-    .result h3 {
-        margin-bottom: 10px;
-        font-size: 14px; /* Reduz o tamanho do título */
-        text-align: center;
-    }
+        .result h3 {
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-align: center;
+        }
 
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr); /* Ajusta para caber em colunas menores */
-        gap: 3px;
-    }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 3px;
+        }
 
-    .number {
-        width: 30px; /* Reduz o tamanho da bola */
-        height: 30px; /* Reduz o tamanho da bola */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #ccc;
-        border-radius: 50%;
-        background-color: white;
-        font-weight: bold;
-        font-size: 12px; /* Reduz o tamanho da fonte */
-    }
+        .number {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            background-color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
 
-    .highlight {
-        background-color: #930089;
-        color: white;
-        border-color: #930089;
-    }
+        .highlight {
+            background-color: #930089;
+            color: white;
+            border-color: #930089;
+        }
 
-    .loading {
-        display: none;
-        margin: 20px 0;
-    }
+        .loading {
+            display: none;
+            margin: 20px 0;
+        }
 
-    .loading.active {
-        display: block;
-    }
+        .loading.active {
+            display: block;
+        }
 
-    .error {
-        color: red;
-        margin-top: 10px;
-    }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
 
-    button {
-        padding: 8px 16px;
-        background-color: #930089;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
+        button {
+            padding: 8px 16px;
+            background-color: #930089;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-    button:hover {
-        background-color: #6b0063;
+        button:hover {
+            background-color: #6b0063;
+        }
 
-    }    
-    .game-container {
-        border: 1px solid #002; /* Borda fina */
-        padding: 10px; /* Espaçamento interno */
-        border-radius: 8px; /* Bordas arredondadas */
-        margin-bottom: 10px; /* Espaçamento entre jogos */
-        background-color: #fff; /* Cor de fundo branca */
-    }
-    .column-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    background-color: #fff;
-}
+        .game-container {
+            border: 1px solid #002;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background-color: #fff;
+        }
 
-.row {
-    display: flex;
-    justify-content: space-between;
-    width: 80px; /* Ajuste para manter os números compactos */
-    margin-bottom: 5px;
-}
+        .column-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            background-color: #fff;
+        }
 
-.number {
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    font-size: 12px;
-    background-color: white;
-    font-weight: bold;
-}
+        .row {
+            display: flex;
+            justify-content: space-between;
+            width: 80px;
+            margin-bottom: 5px;
+        }
 
-.highlight {
-    background-color: #930089;
-    color: white;
-    border-color: #930089;
-}
+        .number {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            font-size: 12px;
+            background-color: white;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background-color: #930089;
+            color: white;
+            border-color: #930089;
+        }
+
+        progress {
+            width: 100%;
+            height: 20px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        progress::-webkit-progress-bar {
+            background-color: #f3f3f3;
+            border-radius: 10px;
+        }
+
+        progress::-webkit-progress-value {
+            background-color: #930089;
+            border-radius: 10px;
+        }
+
+        progress::-moz-progress-bar {
+            background-color: #930089;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .progress-percentage {
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #930089;
+        }
+
+        .summary {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            color: #930089;
+        }
+
+        .summary-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+
+        .summary-table th, .summary-table td {
+            padding: 8px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <div class="result">
-        <h3>Título</h3>
-        <div class="game-container">
-            <div class="grid">
-                <!-- Números aqui -->
-            </div>
-        </div>
-    </div>
-
-
     <div class="container">
         <h2>Histórico de Resultados Lotofácil</h2>
+
+        <label for="maxConcursos">Número máximo de concursos a carregar:</label>
+        <input type="number" id="maxConcursos" value="100" min="1" style="margin-right: 10px;">
+
+        <span id="ultimoConcurso" style="font-weight: bold; color: #930089;">Carregando o último concurso...</span>
+        
+        <br><br>
         <button id="loadResults">Carregar Resultados</button>
+
+        <!-- Barra de Progresso -->
+        <progress id="progressBar" value="0" max="100">
+            <span id="progressText" class="progress-text">0%</span>
+        </progress>
+
+        <!-- Texto da porcentagem abaixo da barra de progresso -->
+        <div id="progressPercentage" class="progress-percentage">0%</div>
+
         <div id="loading" class="loading">Carregando resultados...</div>
         <div id="error" class="error"></div>
         <div id="results"></div>
     </div>
 
     <script>
-async function fetchResults() {
-    const resultsContainer = document.getElementById('results');
-    const loading = document.getElementById('loading');
-    const error = document.getElementById('error');
+        let ultimoConcurso = 0;
 
-    loading.classList.add('active');
-    error.textContent = '';
-    resultsContainer.innerHTML = '';
+        async function fetchUltimoConcurso() {
+            const baseUrl = 'https://loteriascaixa-api.herokuapp.com/api/lotofacil';
+            const ultimoConcursoSpan = document.getElementById('ultimoConcurso');
 
-    const baseUrl = 'https://loteriascaixa-api.herokuapp.com/api/lotofacil';
-    let concurso = 1;
-    let keepFetching = true;
-
-    try {
-        while (keepFetching) {
-            const url = `${baseUrl}/${concurso}`;
-            const response = await fetch(url);
-
-            if (!response.ok) {
-                keepFetching = false;
-                break;
-            }
-
-            const data = await response.json();
-            const dezenas = data.dezenas.map(Number); // Garante que todas as dezenas sejam números
-
-            // Cria um elemento de resultado
-            const resultDiv = document.createElement('div');
-            resultDiv.className = 'result';
-
-            const title = document.createElement('h3');
-            title.textContent = `Concurso: ${data.concurso} - Data: ${data.data}`;
-            resultDiv.appendChild(title);
-
-            // Cria o contêiner com duas colunas
-            const columnContainer = document.createElement('div');
-            columnContainer.className = 'column-container';
-
-            // Adiciona os números em pares
-            for (let i = 1; i <= 25; i += 2) {
-                const rowDiv = document.createElement('div');
-                rowDiv.className = 'row';
-
-                // Primeira coluna
-                const col1 = document.createElement('div');
-                col1.className = 'number';
-                col1.textContent = i.toString().padStart(2, '0');
-                if (dezenas.includes(i)) {
-                    col1.classList.add('highlight');
-                }
-                rowDiv.appendChild(col1);
-
-                // Segunda coluna
-                if (i + 1 <= 25) {
-                    const col2 = document.createElement('div');
-                    col2.className = 'number';
-                    col2.textContent = (i + 1).toString().padStart(2, '0');
-                    if (dezenas.includes(i + 1)) {
-                        col2.classList.add('highlight');
-                    }
-                    rowDiv.appendChild(col2);
+            try {
+                const response = await fetch(`${baseUrl}/latest`);
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar o último concurso.');
                 }
 
-                columnContainer.appendChild(rowDiv);
+                const data = await response.json();
+                ultimoConcurso = data.concurso;
+                ultimoConcursoSpan.textContent = `Último concurso disponível: ${ultimoConcurso}`;
+            } catch (err) {
+                ultimoConcursoSpan.textContent = 'Erro ao carregar o último concurso.';
+                console.error(err);
             }
-
-            resultDiv.appendChild(columnContainer);
-            resultsContainer.appendChild(resultDiv);
-
-            concurso++;
         }
-    } catch (err) {
-        error.textContent = 'Erro ao buscar os resultados. Tente novamente mais tarde.';
-        console.error(err);
-    } finally {
-        loading.classList.remove('active');
-    }
-}
 
-document.getElementById('loadResults').addEventListener('click', fetchResults);
+        async function fetchResults() {
+            const resultsContainer = document.getElementById('results');
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const maxConcursosInput = document.getElementById('maxConcursos');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const progressPercentage = document.getElementById('progressPercentage');
+
+            loading.classList.add('active');
+            error.textContent = '';
+            resultsContainer.innerHTML = '';
+
+            const GrupoPar = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24];
+            const relatorioPar = [];
+            const rankingNaoSorteados = {};
+            const duplas = {};
+            const triplas = {};
+            const sequencias = {};
+
+            GrupoPar.forEach(num => (rankingNaoSorteados[num] = 0));
+
+            const baseUrl = 'https://loteriascaixa-api.herokuapp.com/api/lotofacil';
+            let concurso = 1;
+
+            const maxConcursos = parseInt(maxConcursosInput.value) || 100;
+
+            try {
+                while (concurso <= maxConcursos) {
+                    const url = `${baseUrl}/${concurso}`;
+                    const response = await fetch(url);
+
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            break;
+                        } else {
+                            throw new Error('Erro ao buscar os resultados.');
+                        }
+                    }
+
+                    const data = await response.json();
+                    const dezenas = data.dezenas.map(Number);
+
+                    // Atualizando duplas e triplas somente para os números pares do GrupoPar
+                    const paresSorteados = dezenas.filter(num => GrupoPar.includes(num));
+
+                    for (let i = 0; i < paresSorteados.length; i++) {
+                        for (let j = i + 1; j < paresSorteados.length; j++) {
+                            const dupla = [paresSorteados[i], paresSorteados[j]].sort().join(',');
+                            duplas[dupla] = duplas[dupla] ? duplas[dupla] + 1 : 1;
+                        }
+
+                        for (let j = i + 1; j < paresSorteados.length; j++) {
+                            for (let k = j + 1; k < paresSorteados.length; k++) {
+                                const tripla = [paresSorteados[i], paresSorteados[j], paresSorteados[k]].sort().join(',');
+                                triplas[tripla] = triplas[tripla] ? triplas[tripla] + 1 : 1;
+                            }
+                        }
+                    }
+
+                    // Verificando sequências somente para os números pares do GrupoPar
+                    for (let i = 0; i < paresSorteados.length - 2; i++) {
+                        const seq = [paresSorteados[i], paresSorteados[i + 1], paresSorteados[i + 2]].sort().join(',');
+                        sequencias[seq] = sequencias[seq] ? sequencias[seq] + 1 : 1;
+                    }
+
+                    // Ranking dos números não sorteados para os pares
+                    const naoSorteadosPar = GrupoPar.filter(num => !dezenas.includes(num));
+                    naoSorteadosPar.forEach(num => rankingNaoSorteados[num]++);
+
+                    if (naoSorteadosPar.length > 0) {
+                        relatorioPar.push({
+                            concurso: data.concurso,
+                            data: data.data,
+                            naoSorteados: naoSorteadosPar
+                        });
+                    }
+
+                    // Atualizando a barra de progresso
+                    const progresso = Math.round((concurso / maxConcursos) * 100);
+                    progressBar.value = progresso;
+                    progressText.textContent = `${progresso}%`;
+                    progressPercentage.textContent = `${progresso}%`;
+
+                    concurso++;
+                }
+
+                const estatisticasDiv = document.createElement('div');
+                estatisticasDiv.className = 'container';
+                estatisticasDiv.innerHTML = '<h2>Estatísticas</h2>';
+
+                // Tabela de Números Não Sorteados no GrupoPar
+                const tabelaPar = `
+                    <table border="1" style="margin: 20px; text-align: center; border-collapse: collapse; width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Concurso</th>
+                                <th>Data</th>
+                                <th>Números Não Sorteados no GrupoPar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${relatorioPar
+                                .map(entry => `
+                                    <tr>
+                                        <td>${entry.concurso}</td>
+                                        <td>${entry.data}</td>
+                                        <td>${entry.naoSorteados.join(', ')}</td>
+                                    </tr>
+                                `).join('')}
+                        </tbody>
+                    </table>`;
+
+                estatisticasDiv.innerHTML += tabelaPar;
+
+                // Resumo Final
+                const resumoFinal = `
+                    <div class="summary">
+                        <h3>Resumo Final - Top 1 em Duplas, Triplas e Sequências</h3>
+                        <table class="summary-table">
+                            <thead>
+                                <tr>
+                                    <th>Categoria</th>
+                                    <th>Primeiro</th>
+                                    <th>Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Duplas</td>
+                                    <td>${Object.entries(duplas).sort((a, b) => b[1] - a[1])[0][0]}</td>
+                                    <td>${Object.entries(duplas).sort((a, b) => b[1] - a[1])[0][1]}</td>
+                                </tr>
+                                <tr>
+                                    <td>Triplas</td>
+                                    <td>${Object.entries(triplas).sort((a, b) => b[1] - a[1])[0][0]}</td>
+                                    <td>${Object.entries(triplas).sort((a, b) => b[1] - a[1])[0][1]}</td>
+                                </tr>
+                                <tr>
+                                    <td>Sequências</td>
+                                    <td>${Object.entries(sequencias).sort((a, b) => b[1] - a[1])[0][0]}</td>
+                                    <td>${Object.entries(sequencias).sort((a, b) => b[1] - a[1])[0][1]}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Ranking dos Números Não Sorteados -->
+                    <div class="summary">
+                        <h3>Resumo: Ranking dos Números Não Sorteados</h3>
+                        <table class="summary-table">
+                            <thead>
+                                <tr>
+                                    <th>Número</th>
+                                    <th>Quantidade de Vezes Não Sorteado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${Object.entries(rankingNaoSorteados).sort((a, b) => b[1] - a[1])
+                                    .slice(0, 10)
+                                    .map(([numero, quantidade]) => `
+                                        <tr>
+                                            <td>${numero}</td>
+                                            <td>${quantidade}</td>
+                                        </tr>
+                                    `).join('')}
+                            </tbody>
+                        </table>
+                    </div>`;
+
+                estatisticasDiv.innerHTML += resumoFinal;
+                resultsContainer.appendChild(estatisticasDiv);
+            } catch (err) {
+                error.textContent = 'Erro ao carregar os resultados.';
+                console.error(err);
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+
+        document.getElementById('loadResults').addEventListener('click', fetchResults);
+
+        fetchUltimoConcurso();
     </script>
-    
 </body>
 </html>
