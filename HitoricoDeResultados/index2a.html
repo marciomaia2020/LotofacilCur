@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico de Resultados Lotofácil</title>
+    <style>
+ body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra cinza claro */
+            max-width: 800px;
+            width: 100%;
+            border: 1px solid #ccc; /* Borda leve */
+        }
+        .result {
+            margin-bottom: 20px;
+        }
+        .grid {
+            display: grid;
+           grid-template-columns: 1fr 1fr; /* Duas colunas */
+            /*grid-template-columns: 10% 10%; /* Duas colunas */
+            gap: 1px; /* Espaço menor entre os itens */
+            justify-items: center; /* Centraliza horizontalmente */
+            align-items: center; /* Centraliza verticalmente */
+            margin-top: 10px;
+        }
+
+        .number {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            background-color: white;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para cada número */
+        }
+
+        .highlight {
+            background-color: #930089;
+            color: white;
+            border-color: #930089;
+        }
+
+        .loading {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #930089;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #6b0063;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Histórico de Resultados Lotofácil</h2>
+        <button id="loadResults">Carregar Resultados</button>
+        <div id="loading" class="loading">Carregando resultados...</div>
+        <div id="error" class="error"></div>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        async function fetchResults() {
+            const resultsContainer = document.getElementById('results');
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+    
+            loading.classList.add('active');
+            error.textContent = '';
+            resultsContainer.innerHTML = '';
+    
+            const baseUrl = 'https://loteriascaixa-api.herokuapp.com/api/lotofacil';
+            let concurso = 1;
+            let keepFetching = true;
+    
+            try {
+                while (keepFetching) {
+                    const url = `${baseUrl}/${concurso}`;
+                    const response = await fetch(url);
+    
+                    if (!response.ok) {
+                        keepFetching = false;
+                        break;
+                    }
+    
+                    const data = await response.json();
+                    const dezenas = data.dezenas.map(Number); // Garante que todas as dezenas sejam números
+    
+                    // Cria um elemento de resultado
+                    const resultDiv = document.createElement('div');
+                    resultDiv.className = 'result';
+    
+                    const title = document.createElement('h3');
+                    title.textContent = `Concurso: ${data.concurso} - Data: ${data.data}`;
+                    resultDiv.appendChild(title);
+    
+                    const grid = document.createElement('div');
+                    grid.className = 'grid';
+    
+                    for (let i = 1; i <= 25; i++) {
+                        const numberDiv = document.createElement('div');
+                        numberDiv.className = 'number';
+                        numberDiv.textContent = i.toString().padStart(2, '0');
+    
+                        if (dezenas.includes(i)) {
+                            numberDiv.classList.add('highlight');
+                        }
+    
+                        grid.appendChild(numberDiv);
+                    }
+    
+                    resultDiv.appendChild(grid);
+                    resultsContainer.appendChild(resultDiv);
+    
+                    concurso++;
+                }
+            } catch (err) {
+                error.textContent = 'Erro ao buscar os resultados. Tente novamente mais tarde.';
+                console.error(err);
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+    
+        document.getElementById('loadResults').addEventListener('click', fetchResults);
+    </script>
+    
+</body>
+</html>
