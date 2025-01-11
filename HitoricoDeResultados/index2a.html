@@ -3,161 +3,569 @@
 <head>
     <meta charset="UTF-8">
     <title>Histórico de Resultados Lotofácil</title>
+
     <style>
- body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            padding: 20px;
-            display: flex;
+        /* Estilos base */
+        <style>
+    /* Estilos base */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        padding: 10px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .container {
+        background-color: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        box-sizing: border-box;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Centralizar elementos de formulário */
+    label, input, select {
+        margin: 5px auto;
+        text-align: center;
+    }
+
+    /* Estilos para tabelas responsivas */
+    table {
+        width: 100%;
+        margin: 10px auto;
+        border-collapse: collapse;
+        overflow-x: auto;
+        display: block;
+    }
+
+    th, td {
+        padding: 8px;
+        border: 1px solid #ccc;
+        text-align: center;
+        min-width: 100px;
+    }
+
+    /* Estilos para controles de filtro */
+    #filtroTabela, #filtroQuantidade {
+        padding: 8px;
+        margin: 5px auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    /* Container dos controles centralizado */
+    .controlesContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin: 10px auto;
+        width: 100%;
+    }
+
+    /* Estilos para botões */
+    button {
+        padding: 8px 16px;
+        background-color: #930089;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        margin: 5px auto;
+        display: block;
+    }
+
+    button:hover {
+        background-color: #6b0063;
+    }
+
+    /* Barra de progresso centralizada */
+    progress {
+        width: 100%;
+        height: 20px;
+        margin: 15px auto;
+        display: block;
+    }
+
+    /* Centralizar conteúdo das tabelas de resumo */
+    .summary {
+        margin: 20px auto;
+        text-align: center;
+        width: 100%;
+    }
+
+    .summary-table {
+        margin: 10px auto;
+        width: auto;
+        display: inline-block;
+        min-width: 50%;
+    }
+
+    /* Wrapper para tabelas com scroll horizontal */
+    .table-wrapper {
+        overflow-x: auto;
+        margin: 15px auto;
+        text-align: center;
+        width: 100%;
+    }
+
+    /* Media Queries */
+    /* Para Smartphones (até 480px) */
+    @media screen and (max-width: 480px) {
+        .container {
+            padding: 10px;
+        }
+
+        .controlesContainer {
             flex-direction: column;
             align-items: center;
         }
 
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra cinza claro */
-            max-width: 800px;
-            width: 100%;
-            border: 1px solid #ccc; /* Borda leve */
-        }
-        .result {
-            margin-bottom: 20px;
-        }
-        .grid {
-            display: grid;
-           grid-template-columns: 1fr 1fr; /* Duas colunas */
-            /*grid-template-columns: 10% 10%; /* Duas colunas */
-            gap: 1px; /* Espaço menor entre os itens */
-            justify-items: center; /* Centraliza horizontalmente */
-            align-items: center; /* Centraliza verticalmente */
-            margin-top: 10px;
-        }
-
-        .number {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #ccc;
-            border-radius: 50%;
-            background-color: white;
-            font-weight: bold;
-            font-size: 14px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para cada número */
-        }
-
-        .highlight {
-            background-color: #930089;
-            color: white;
-            border-color: #930089;
-        }
-
-        .loading {
-            display: none;
-            margin: 20px 0;
-        }
-
-        .loading.active {
-            display: block;
-        }
-
-        .error {
-            color: red;
-            margin-top: 10px;
+        #filtroTabela, #filtroQuantidade {
+            width: 90%;
         }
 
         button {
-            padding: 8px 16px;
-            background-color: #930089;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            width: 90%;
+        }
+    }
+
+    /* Para Tablets (481px até 768px) */
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+    }
+
+    /* Para Smartwatches (até 300px) */
+    @media screen and (max-width: 300px) {
+        .container {
+            padding: 5px;
         }
 
-        button:hover {
-            background-color: #6b0063;
+        button {
+            width: 95%;
         }
 
+        #filtroTabela, #filtroQuantidade {
+            width: 95%;
+        }
+    }
+
+    /* Centralizar mensagens de feedback */
+    .loading, .error {
+        text-align: center;
+        padding: 10px;
+        margin: 10px auto;
+        width: 100%;
+    }
+
+    /* Centralizar texto da barra de progresso */
+    .progress-text {
+        text-align: center;
+        width: 100%;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    /* Centralizar porcentagem da barra de progresso */
+    .progress-percentage {
+        text-align: center;
+        width: 100%;
+        margin: 10px auto;
+    }
+
+    /* Ajustes adicionais para garantir centralização em todos os dispositivos */
+    h2, h3, p {
+        text-align: center;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
     </style>
+
+
 </head>
 <body>
     <div class="container">
         <h2>Histórico de Resultados Lotofácil</h2>
+    
+        <label for="maxConcursos">Número máximo de concursos a carregar:</label>
+        <input type="number" id="maxConcursos" value="100" min="1" style="margin-right: 10px;">
+    
+        <span id="ultimoConcurso" style="font-weight: bold; color: #930089;">Carregando o último concurso...</span>
+    
+        <br><br>
         <button id="loadResults">Carregar Resultados</button>
+    
+        <!-- Barra de Progresso -->
+        <progress id="progressBar" value="0" max="100">
+            <span id="progressText" class="progress-text">0%</span>
+        </progress>
+    
+        <!-- Texto da porcentagem abaixo da barra de progresso -->
+        <div id="progressPercentage" class="progress-percentage">0%</div>
+    
         <div id="loading" class="loading">Carregando resultados...</div>
         <div id="error" class="error"></div>
         <div id="results"></div>
     </div>
+    
 
     <script>
-        async function fetchResults() {
-            const resultsContainer = document.getElementById('results');
-            const loading = document.getElementById('loading');
-            const error = document.getElementById('error');
-    
-            loading.classList.add('active');
-            error.textContent = '';
-            resultsContainer.innerHTML = '';
-    
-            const baseUrl = 'https://loteriascaixa-api.herokuapp.com/api/lotofacil';
-            let concurso = 1;
-            let keepFetching = true;
-    
-            try {
-                while (keepFetching) {
-                    const url = `${baseUrl}/${concurso}`;
-                    const response = await fetch(url);
-    
-                    if (!response.ok) {
-                        keepFetching = false;
-                        break;
-                    }
-    
-                    const data = await response.json();
-                    const dezenas = data.dezenas.map(Number); // Garante que todas as dezenas sejam números
-    
-                    // Cria um elemento de resultado
-                    const resultDiv = document.createElement('div');
-                    resultDiv.className = 'result';
-    
-                    const title = document.createElement('h3');
-                    title.textContent = `Concurso: ${data.concurso} - Data: ${data.data}`;
-                    resultDiv.appendChild(title);
-    
-                    const grid = document.createElement('div');
-                    grid.className = 'grid';
-    
-                    for (let i = 1; i <= 25; i++) {
-                        const numberDiv = document.createElement('div');
-                        numberDiv.className = 'number';
-                        numberDiv.textContent = i.toString().padStart(2, '0');
-    
-                        if (dezenas.includes(i)) {
-                            numberDiv.classList.add('highlight');
-                        }
-    
-                        grid.appendChild(numberDiv);
-                    }
-    
-                    resultDiv.appendChild(grid);
-                    resultsContainer.appendChild(resultDiv);
-    
-                    concurso++;
-                }
-            } catch (err) {
-                error.textContent = 'Erro ao buscar os resultados. Tente novamente mais tarde.';
-                console.error(err);
-            } finally {
-                loading.classList.remove('active');
-            }
+let ultimoConcurso = 0;
+
+async function fetchUltimoConcurso() {
+    const baseUrl = 'https://loteriascaixa-api.herokuapp.com/api/lotofacil';
+    const ultimoConcursoSpan = document.getElementById('ultimoConcurso');
+
+    try {
+        const response = await fetch(`${baseUrl}/latest`);
+        if (!response.ok) {
+            throw new Error('Erro ao buscar o último concurso.');
         }
+
+        const data = await response.json();
+        ultimoConcurso = data.concurso;
+        ultimoConcursoSpan.textContent = `Último concurso disponível: ${ultimoConcurso}`;
+    } catch (err) {
+        ultimoConcursoSpan.textContent = 'Erro ao carregar o último concurso.';
+        console.error(err);
+    }
+}
+
+async function fetchResults() {
+    const resultsContainer = document.getElementById('results');
+    const loading = document.getElementById('loading');
+    const error = document.getElementById('error');
+    const maxConcursosInput = document.getElementById('maxConcursos');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const progressPercentage = document.getElementById('progressPercentage');
+
+    loading.classList.add('active');
+    error.textContent = '';
+    resultsContainer.innerHTML = '';
+
+    const GrupoPar = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24];
+    const relatorioPar = [];
+    const rankingNaoSorteados = {};
+    const duplas = {};
+    const triplas = {};
+    const sequencias = {};
+    const frequenciaNaoSorteados = {};
+
+    GrupoPar.forEach(num => (rankingNaoSorteados[num] = 0));
+
+    const baseUrl = 'https://loteriascaixa-api.herokuapp.com/api/lotofacil';
+    let concurso = 1;
+
+    const maxConcursos = parseInt(maxConcursosInput.value) || 100;
+
+    try {
+        while (concurso <= maxConcursos) {
+            const url = `${baseUrl}/${concurso}`;
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    break;
+                } else {
+                    throw new Error('Erro ao buscar os resultados.');
+                }
+            }
+
+            const data = await response.json();
+            const dezenas = data.dezenas.map(Number);
+
+            // Atualizando duplas e triplas somente para os números pares do GrupoPar
+            const paresSorteados = dezenas.filter(num => GrupoPar.includes(num));
+
+            for (let i = 0; i < paresSorteados.length; i++) {
+                for (let j = i + 1; j < paresSorteados.length; j++) {
+                    const dupla = [paresSorteados[i], paresSorteados[j]].sort().join(',');
+                    duplas[dupla] = duplas[dupla] ? duplas[dupla] + 1 : 1;
+                }
+
+                for (let j = i + 1; j < paresSorteados.length; j++) {
+                    for (let k = j + 1; k < paresSorteados.length; k++) {
+                        const tripla = [paresSorteados[i], paresSorteados[j], paresSorteados[k]].sort().join(',');
+                        triplas[tripla] = triplas[tripla] ? triplas[tripla] + 1 : 1;
+                    }
+                }
+            }
+
+            // Verificando sequências somente para os números pares do GrupoPar
+            for (let i = 0; i < paresSorteados.length - 2; i++) {
+                const seq = [paresSorteados[i], paresSorteados[i + 1], paresSorteados[i + 2]].sort().join(',');
+                sequencias[seq] = sequencias[seq] ? sequencias[seq] + 1 : 1;
+            }
+
+            // Ranking dos números não sorteados para os pares
+            const naoSorteadosPar = GrupoPar.filter(num => !dezenas.includes(num));
+            naoSorteadosPar.forEach(num => rankingNaoSorteados[num]++);
+
+            if (naoSorteadosPar.length > 0) {
+                relatorioPar.push({
+                    concurso: data.concurso,
+                    data: data.data,
+                    naoSorteados: naoSorteadosPar
+                });
+            }
+
+            // Contar a frequência de números não sorteados
+            const quantidadeNaoSorteados = naoSorteadosPar.length;
+            frequenciaNaoSorteados[quantidadeNaoSorteados] = frequenciaNaoSorteados[quantidadeNaoSorteados] ? frequenciaNaoSorteados[quantidadeNaoSorteados] + 1 : 1;
+
+            // Atualizando a barra de progresso
+            const progresso = Math.round((concurso / maxConcursos) * 100);
+            progressBar.value = progresso;
+            progressText.textContent = `${progresso}%`;
+            progressPercentage.textContent = `${progresso}%`;
+
+            concurso++;
+        }
+
+        const estatisticasDiv = document.createElement('div');
+        estatisticasDiv.className = 'container';
+        estatisticasDiv.innerHTML = '<h2>Estatísticas</h2>';
+
+        // Tabela de Números Não Sorteados no GrupoPar
+        const tabelaPar = `
+            <table border="1"  text-align: center; border-collapse: collapse; width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Concurso</th>
+                        <th>Data</th>
+                        <th>Números Não Sorteados no GrupoPar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${relatorioPar
+                        .map(entry => `
+                            <tr>
+                                <td>${entry.concurso}</td>
+                                <td>${entry.data}</td>
+                                <td>${entry.naoSorteados.join(', ')}</td>
+                            </tr>
+                        `).join('')}
+                </tbody>
+            </table>`;
+
+        estatisticasDiv.innerHTML += tabelaPar;
+
+        // Tabela de Frequências de Números Não Sorteados
+        const tabelaFrequencia = `
+            <div class="summary">
+                <h3>Resumo das Frequências</h3>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Quantidade de Números Não Sorteados</th>
+                            <th>Número de Sorteios</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${Object.entries(frequenciaNaoSorteados)
+                            .map(([quantidade, numero]) => `
+                                <tr>
+                                    <td>${quantidade}</td>
+                                    <td>${numero}</td>
+                                </tr>
+                            `).join('')}
+                    </tbody>
+                </table>
+            </div>`;
+
+        estatisticasDiv.innerHTML += tabelaFrequencia;
+
+        // Resumo Final
+        const resumoFinal = `
+            <div class="summary">
+                <h3>Resumo Final - Top 1 em Duplas, Triplas e Sequências</h3>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Categoria</th>
+                            <th>Primeiro</th>
+                            <th>Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Duplas</td>
+                            <td>${Object.entries(duplas).sort((a, b) => b[1] - a[1])[0][0]}</td>
+                            <td>${Object.entries(duplas).sort((a, b) => b[1] - a[1])[0][1]}</td>
+                        </tr>
+                        <tr>
+                            <td>Triplas</td>
+                            <td>${Object.entries(triplas).sort((a, b) => b[1] - a[1])[0][0]}</td>
+                            <td>${Object.entries(triplas).sort((a, b) => b[1] - a[1])[0][1]}</td>
+                        </tr>
+                        <tr>
+                            <td>Sequências</td>
+                            <td>${Object.entries(sequencias).sort((a, b) => b[1] - a[1])[0][0]}</td>
+                            <td>${Object.entries(sequencias).sort((a, b) => b[1] - a[1])[0][1]}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>`;
+
+        estatisticasDiv.innerHTML += resumoFinal;
+
+        // Ranking dos Números Não Sorteados
+        const rankingDiv = `
+            <div class="summary">
+                <h3>Resumo: Ranking dos Números Não Sorteados</h3>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Quantidade de Vezes Não Sorteado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${Object.entries(rankingNaoSorteados).sort((a, b) => b[1] - a[1])
+                            .slice(0, 10)
+                            .map(([numero, quantidade]) => `
+                                <tr>
+                                    <td>${numero}</td>
+                                    <td>${quantidade}</td>
+                                </tr>`).join('')}
+                    </tbody>
+                </table>
+            </div>`;
+
+        estatisticasDiv.innerHTML += rankingDiv;
+        resultsContainer.appendChild(estatisticasDiv);
+
+        // Adicionar Filtro
+        adicionarFiltroTabela();
+
+    } catch (err) {
+        error.textContent = 'Erro ao carregar os resultados.';
+        console.error(err);
+    } finally {
+        loading.classList.remove('active');
+    }
+}
+
+function adicionarFiltroTabela() {
+    // Criar container para os controles
+    const controlesContainer = document.createElement("div");
+    controlesContainer.style.marginBottom = "15px";
+    controlesContainer.style.display = "flex";
+    controlesContainer.style.gap = "10px";
+    controlesContainer.style.alignItems = "center";
+
+    // Input de filtro texto
+    const input = document.createElement("input");
+    input.type = "text";
+    input.id = "filtroTabela";
+    input.placeholder = "Filtrar por número ou data...";
+    input.style.flex = "1";
+
+    // Select para filtrar por quantidade de números
+    const selectQuantidade = document.createElement("select");
+    selectQuantidade.id = "filtroQuantidade";
+    selectQuantidade.style.padding = "5px";
     
-        document.getElementById('loadResults').addEventListener('click', fetchResults);
+    // Adicionar opção padrão
+    const optionPadrao = document.createElement("option");
+    optionPadrao.value = "";
+    optionPadrao.textContent = "Filtrar por quantidade";
+    selectQuantidade.appendChild(optionPadrao);
+
+    // Adicionar elementos ao container
+    controlesContainer.appendChild(input);
+    controlesContainer.appendChild(selectQuantidade);
+
+    const tabela = document.querySelector("table");
+    const container = tabela ? tabela.parentElement : null;
+    
+    if (container) {
+        container.insertBefore(controlesContainer, tabela);
+    }
+
+    // Preencher o select com as quantidades únicas
+    function preencherSelectQuantidades() {
+        const linhas = tabela.querySelectorAll("tbody tr");
+        const quantidades = new Set();
+
+        linhas.forEach(linha => {
+            const numeros = linha.cells[2].textContent.split(',').map(n => n.trim());
+            quantidades.add(numeros.length);
+        });
+
+        // Converter para array, ordenar e adicionar ao select
+        Array.from(quantidades)
+            .sort((a, b) => a - b)
+            .forEach(quantidade => {
+                const option = document.createElement("option");
+                option.value = quantidade;
+                option.textContent = `${quantidade} Número${quantidade > 1 ? 's' : ''} Não Sorteado${quantidade > 1 ? 's' : ''}`;
+                selectQuantidade.appendChild(option);
+            });
+    }
+
+    preencherSelectQuantidades();
+
+    // Função de filtro combinado
+    function filtrarTabela() {
+        const filtroTexto = input.value.toLowerCase();
+        const filtroQuantidade = selectQuantidade.value;
+        const linhas = tabela.querySelectorAll("tbody tr");
+
+        linhas.forEach(linha => {
+            const colunas = linha.querySelectorAll("td");
+            const numeros = linha.cells[2].textContent.split(',').map(n => n.trim());
+            
+            let mostrarLinha = true;
+
+            // Aplicar filtro de texto
+            if (filtroTexto) {
+                mostrarLinha = false;
+                colunas.forEach(coluna => {
+                    if (coluna.textContent.toLowerCase().includes(filtroTexto)) {
+                        mostrarLinha = true;
+                    }
+                });
+            }
+
+            // Aplicar filtro de quantidade
+            if (filtroQuantidade && mostrarLinha) {
+                mostrarLinha = numeros.length === parseInt(filtroQuantidade);
+            }
+
+            linha.style.display = mostrarLinha ? "" : "none";
+        });
+    }
+
+    // Eventos de filtro
+    input.addEventListener("keyup", filtrarTabela);
+    selectQuantidade.addEventListener("change", filtrarTabela);
+}
+
+document.getElementById('loadResults').addEventListener('click', fetchResults);
+fetchUltimoConcurso();
+
+        
     </script>
-    
 </body>
 </html>
